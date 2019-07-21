@@ -10,7 +10,7 @@ const getAccessToken = async () => {
     let accessToken;
     if (code) {
       accessToken = await axios.post(
-        `http://localhost:9999/authenticate/?code=${code}`
+        `https://gh-stargazer-prod.herokuapp.com/authenticate/?code=${code}`
         // http://stargazer-gatekeeper.herokuapp.com/authenticate
         // instance of https://github.com/prose/gatekeeper
         // {},
