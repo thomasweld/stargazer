@@ -1,33 +1,48 @@
-import React from "react";
+import React, { useReducer, useEffect } from "react";
 import octocat from "./Octocat.png";
 import "./App.css";
 import axios from "axios";
 
-const getAccessToken = async () => {
-  try {
+function reducer(state, action) {
+  switch (action.type) {
+    case "loginSuccess":
+      return {
+        token: action.token,
+        loggedIn: true
+      };
+    default:
+      throw new Error();
+  }
+}
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, { loggedIn: false });
+
+  const getAccessToken = async code => {
+    try {
+      if (code) {
+        const res = await axios.get(
+          `${process.env.REACT_APP_GATEKEEPER_URL}/${code}`
+        );
+        if (res && res.data && res.data.token) {
+          dispatch({ type: "loginSuccess", token: res.data.token });
+          return;
+        } else {
+          console.log(res.data);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
-    let accessToken;
     if (code) {
-      accessToken = await axios.post(
-        `https://gh-stargazer-prod.herokuapp.com/authenticate/?code=${code}`
-        // http://stargazer-gatekeeper.herokuapp.com/authenticate
-        // instance of https://github.com/prose/gatekeeper
-        // {},
-        // { headers: { "Access-Control-Allow-Origin": "*" } }
-      );
-      console.log(accessToken);
+      getAccessToken(code);
     }
-
-    console.log("getAccessToken", accessToken);
-    return accessToken;
-  } catch (e) {
-    console.error(e);
-  }
-};
-
-function App() {
-  getAccessToken();
+  });
 
   return (
     <div className="App">
@@ -38,7 +53,7 @@ function App() {
           className="App-link"
           href={`https://github.com/login/oauth/authorize?client_id=${
             process.env.REACT_APP_GITHUB_CLIENT_ID
-          }&scope=public_repo`}
+          }&scope=user`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -47,6 +62,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
