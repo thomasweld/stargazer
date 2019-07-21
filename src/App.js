@@ -48,17 +48,22 @@ const App = () => {
     <div className="App">
       <header className="App-header">
         <img src={octocat} className="App-logo" alt="logo" />
-        <p>Login with GitHub to get started.</p>
-        <a
-          className="App-link"
-          href={`https://github.com/login/oauth/authorize?client_id=${
-            process.env.REACT_APP_GITHUB_CLIENT_ID
-          }&scope=user`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Login
-        </a>
+        {!state.loggedIn && (
+          <React.Fragment>
+            <p>Login with GitHub to get started.</p>
+            <a
+              className="App-link"
+              href={`https://github.com/login/oauth/authorize?client_id=${
+                process.env.REACT_APP_GITHUB_CLIENT_ID
+              }&scope=user`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Login
+            </a>
+          </React.Fragment>
+        )}
+        {state.loggedIn && <p>loggedIn success</p>}
       </header>
     </div>
   );
