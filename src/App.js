@@ -17,7 +17,7 @@ function reducer(state, action) {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, { loggedIn: false });
-
+  console.log("App state", state);
   const getAccessToken = async code => {
     try {
       if (code) {
@@ -39,7 +39,7 @@ const App = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
-    if (code) {
+    if (code && !state.loggedIn) {
       getAccessToken(code);
     }
   });
