@@ -2,15 +2,14 @@ import React from "react";
 import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 
-const GET_AVATAR = gql`
-  query {
-    viewer {
-      avatarUrl
-    }
-  }
-`;
-
 const Avatar = () => {
+  const GET_AVATAR = gql`
+    query {
+      viewer {
+        avatarUrl
+      }
+    }
+  `;
   return (
     <Query query={GET_AVATAR}>
       {({ loading, error, data }) => {

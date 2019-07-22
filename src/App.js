@@ -6,6 +6,7 @@ import ApolloClient, { gql } from "apollo-boost";
 import { ApolloProvider, Query } from "react-apollo";
 
 import Avatar from "./components/Avatar";
+import UserStarredRepos from "./components/UserStarredRepos";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -116,6 +117,7 @@ const App = () => {
           {state.loggedIn && (
             <React.Fragment>
               <Avatar />
+              <UserStarredRepos cursor={null} />
               <input type="text" onChange={search} />
               {state.query && (
                 <Query query={SEARCH}>
