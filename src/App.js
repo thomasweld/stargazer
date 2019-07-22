@@ -5,13 +5,7 @@ import axios from "axios";
 import ApolloClient, { gql } from "apollo-boost";
 import { ApolloProvider, Query } from "react-apollo";
 
-const GET_AVATAR = gql`
-  query {
-    viewer {
-      avatarUrl
-    }
-  }
-`;
+import Avatar from "./components/Avatar";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -37,6 +31,11 @@ function reducer(state, action) {
     case "logout":
       return {
         loggedIn: false
+      };
+    case "search":
+      return {
+        ...state,
+        query: action.query
       };
     default:
       throw new Error();
@@ -67,6 +66,10 @@ const App = () => {
     }
   };
 
+  const search = e => {
+    dispatch({ type: "search", query: e.target.value });
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
@@ -74,6 +77,21 @@ const App = () => {
       getAccessToken(code);
     }
   });
+
+  const SEARCH = gql`
+    {
+      search(type: REPOSITORY, first: 10, query: ${state.query}) {
+        nodes {
+          ... on Repository {
+            id
+            nameWithOwner
+            url
+            descriptionHTML
+          }
+        }
+      }
+    }
+  `;
 
   return (
     <ApolloProvider client={client}>
@@ -97,24 +115,28 @@ const App = () => {
           )}
           {state.loggedIn && (
             <React.Fragment>
-              <Query query={GET_AVATAR}>
-                {({ loading, error, data }) => {
-                  if (loading) return <div>Loading...</div>;
-                  if (error) return <div>Error :(</div>;
-                  return (
-                    <img
-                      style={{
-                        padding: "24px",
-                        width: "80%",
-                        maxWidth: "200px",
-                        height: "auto"
-                      }}
-                      src={data.viewer.avatarUrl}
-                      alt="sampleImage"
-                    />
-                  );
-                }}
-              </Query>
+              <Avatar />
+              <input type="text" onChange={search} />
+              {state.query && (
+                <Query query={SEARCH}>
+                  {({ loading, error, data }) => {
+                    if (loading) return <div>Loading...</div>;
+                    if (error) return <div>Error :(</div>;
+                    if (
+                      data &&
+                      data.search &&
+                      data.search.nodes &&
+                      data.search.nodes.length
+                    ) {
+                      console.log(data);
+                      return data.search.nodes.map(node => (
+                        <p key={node.id}>{node.url}</p>
+                      ));
+                    }
+                    return null;
+                  }}
+                </Query>
+              )}
               <p
                 className="App-link"
                 onClick={() => {
