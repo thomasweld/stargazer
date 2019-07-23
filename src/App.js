@@ -85,6 +85,13 @@ const App = () => {
     <ApolloProvider client={client}>
       <div className="App">
         <header className="App-header">
+          <h1 style={{ margin: 40 }}>☆ GitHub Stargazer App ☆</h1>
+          <hr
+            style={{
+              width: "80%",
+              marginTop: 40
+            }}
+          />
           {!state.loggedIn && (
             <React.Fragment>
               <img src={octocat} className="App-logo" alt="logo" />
@@ -104,6 +111,12 @@ const App = () => {
           {state.loggedIn && (
             <React.Fragment>
               <Avatar />
+              <hr
+                style={{
+                  width: "80%",
+                  marginTop: 40
+                }}
+              />
               <UserStarredRepos cursor={null} />
               <hr
                 style={{

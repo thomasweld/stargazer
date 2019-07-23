@@ -7,6 +7,8 @@ const Avatar = () => {
     query {
       viewer {
         avatarUrl
+        login
+        name
       }
     }
   `;
@@ -16,16 +18,21 @@ const Avatar = () => {
         if (loading) return <div>Loading...</div>;
         if (error) return <div>Error :(</div>;
         return (
-          <img
-            style={{
-              padding: "24px",
-              width: "80%",
-              maxWidth: "200px",
-              height: "auto"
-            }}
-            src={data.viewer.avatarUrl}
-            alt="sampleImage"
-          />
+          <div>
+            <img
+              style={{
+                padding: "24px",
+                width: "80%",
+                maxWidth: "200px",
+                height: "auto"
+              }}
+              src={data.viewer.avatarUrl}
+              alt="sampleImage"
+            />
+            <h3>
+              @{data.viewer.login} | {data.viewer.name}
+            </h3>
+          </div>
         );
       }}
     </Query>
