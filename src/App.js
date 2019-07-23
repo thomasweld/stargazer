@@ -2,11 +2,12 @@ import React, { useReducer, useEffect } from "react";
 import octocat from "./Octocat.png";
 import "./App.css";
 import axios from "axios";
-import ApolloClient, { gql } from "apollo-boost";
-import { ApolloProvider, Query } from "react-apollo";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
 
 import Avatar from "./components/Avatar";
 import UserStarredRepos from "./components/UserStarredRepos";
+import SearchRepos from "./components/SearchRepos";
 
 const client = new ApolloClient({
   uri: "https://api.github.com/graphql",
@@ -68,6 +69,7 @@ const App = () => {
   };
 
   const search = e => {
+    console.log(e.target.value);
     dispatch({ type: "search", query: e.target.value });
   };
 
@@ -79,28 +81,13 @@ const App = () => {
     }
   });
 
-  const SEARCH = gql`
-    {
-      search(type: REPOSITORY, first: 10, query: ${state.query}) {
-        nodes {
-          ... on Repository {
-            id
-            nameWithOwner
-            url
-            descriptionHTML
-          }
-        }
-      }
-    }
-  `;
-
   return (
     <ApolloProvider client={client}>
       <div className="App">
         <header className="App-header">
-          <img src={octocat} className="App-logo" alt="logo" />
           {!state.loggedIn && (
             <React.Fragment>
+              <img src={octocat} className="App-logo" alt="logo" />
               <p>Login with GitHub to get started.</p>
               <a
                 className="App-link"
@@ -118,27 +105,24 @@ const App = () => {
             <React.Fragment>
               <Avatar />
               <UserStarredRepos cursor={null} />
-              <input type="text" onChange={search} />
-              {state.query && (
-                <Query query={SEARCH}>
-                  {({ loading, error, data }) => {
-                    if (loading) return <div>Loading...</div>;
-                    if (error) return <div>Error :(</div>;
-                    if (
-                      data &&
-                      data.search &&
-                      data.search.nodes &&
-                      data.search.nodes.length
-                    ) {
-                      console.log(data);
-                      return data.search.nodes.map(node => (
-                        <p key={node.id}>{node.url}</p>
-                      ));
-                    }
-                    return null;
-                  }}
-                </Query>
-              )}
+              <hr
+                style={{
+                  width: "80%",
+                  marginTop: 40
+                }}
+              />
+              <h2 style={{ marginTop: 40 }}>Search</h2>
+              <div style={{ fontSize: 20 }}>
+                <label>Search for repos: </label>
+                <input
+                  type="text"
+                  name="searchRepos"
+                  id="searchRepos"
+                  onChange={search}
+                  style={{ fontSize: 20, margin: 10 }}
+                />
+              </div>
+              {state.query && <SearchRepos queryProp={state.query} />}
               <p
                 className="App-link"
                 onClick={() => {

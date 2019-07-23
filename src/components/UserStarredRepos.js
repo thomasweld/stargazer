@@ -3,13 +3,13 @@ import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 import get from "lodash.get";
 
-const UserStarredRepos = ({ cursor }) => {
+const UserStarredRepos = () => {
   const GET_USER_STARRED_REPOS = gql`
     query($cursor: String) {
       viewer {
         login
         name
-        starredRepositories(last: 10, before: $cursor) {
+        starredRepositories(last: 5, before: $cursor) {
           pageInfo {
             hasPreviousPage
             startCursor
