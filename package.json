@@ -8,6 +8,7 @@
     "emotion": "^10.0.14",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
+    "lodash.get": "^4.4.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6",
