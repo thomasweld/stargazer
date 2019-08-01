@@ -100,7 +100,7 @@ const App = () => {
                 className="App-link"
                 href={`https://github.com/login/oauth/authorize?client_id=${
                   process.env.REACT_APP_GITHUB_CLIENT_ID
-                }&scope=user`}
+                }&scope=user%20public_repo`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -40,7 +40,7 @@ const UserStarredRepos = () => {
               <h4>My Starred Repos:</h4>
               {data.viewer.starredRepositories.edges.map(edge => (
                 <p style={{ fontWeight: "bold" }} key={edge.node.id}>
-                  ☆ {edge.node.name}
+                  ★ {edge.node.name}
                 </p>
               ))}
               {get(
@@ -78,6 +78,7 @@ const UserStarredRepos = () => {
                       }
                     })
                   }
+                  style={{ margin: 10 }}
                 >
                   Load More...
                 </button>

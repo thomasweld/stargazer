@@ -24,6 +24,10 @@
   cursor: pointer;
 }
 
+.repoListing {
+  border: 1px solid #61dafb;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -31,4 +35,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+a {
+  text-decoration: none;
+  color: #33ff33;
 }
